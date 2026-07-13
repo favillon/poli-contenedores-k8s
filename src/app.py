@@ -21,6 +21,25 @@ def get_container_ip() -> str:
         s.close()
 
 
+PALETTES = [
+    ("#6a11cb", "#2575fc", "#8e2de2", "#4a00e0"),
+    ("#ff6e7f", "#bfe9ff", "#fceabb", "#f8b500"),
+    ("#11998e", "#38ef7d", "#1d976c", "#93f9b9"),
+    ("#ee0979", "#ff6a00", "#ffafbd", "#ffc3a0"),
+    ("#fc466b", "#3f5efb", "#fddb92", "#d1fdff"),
+    ("#43cea2", "#185a9d", "#ffafbd", "#ffc3a0"),
+    ("#ff512f", "#dd2476", "#f7971e", "#ffd200"),
+    ("#1a2a6c", "#b21f1f", "#fdbb2d", "#22c1c3"),
+    ("#642b73", "#c6426e", "#ffaf7b", "#ffd86f"),
+    ("#00b09b", "#96c93d", "#a8e063", "#56ab2f"),
+]
+
+
+def palette_for(hostname: str):
+    h = sum(ord(c) for c in (hostname or "")) % len(PALETTES)
+    return PALETTES[h]
+
+
 HTML = """<!doctype html>
 <html lang="es">
 <head>
@@ -50,7 +69,7 @@ HTML = """<!doctype html>
     min-height: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: #fff;
-    background: linear-gradient(125deg, #6a11cb 0%, #2575fc 35%, #8e2de2 70%, #4a00e0 100%);
+    background: linear-gradient(125deg, {{ c1 }} 0%, {{ c2 }} 35%, {{ c3 }} 70%, {{ c4 }} 100%);
     background-size: 300% 300%;
     animation: gradientShift 15s ease infinite;
     padding: 40px 20px;
@@ -229,7 +248,9 @@ HTML = """<!doctype html>
     <div class="header">
       <span class="logo">☸️</span>
       <h1>Kubernetes Python Demo</h1>
+      <p class="subtitle">Fabian Villon</p>
       <p class="subtitle">Hola desde un Pod corriendo en tu cluster</p>
+      <p class="subtitle">Poli - Contenedores</p>
       <div class="pod-name">📦 {{ hostname }}</div>
     </div>
 
@@ -239,39 +260,6 @@ HTML = """<!doctype html>
         <div class="label">Server IP</div>
         <div class="value">{{ container_ip }}</div>
         <span class="badge ok">container</span>
-      </div>
-
-      <div class="card">
-        <span class="icon">🛰️</span>
-        <div class="label">Pod IP</div>
-        <div class="value small">{{ pod_ip }}</div>
-        {% if pod_ip_available %}
-          <span class="badge ok">k8s</span>
-        {% else %}
-          <span class="badge warn">downward API</span>
-        {% endif %}
-      </div>
-
-      <div class="card">
-        <span class="icon">🗂️</span>
-        <div class="label">Namespace</div>
-        <div class="value">{{ namespace }}</div>
-        {% if namespace_available %}
-          <span class="badge ok">k8s</span>
-        {% else %}
-          <span class="badge warn">N/D</span>
-        {% endif %}
-      </div>
-
-      <div class="card">
-        <span class="icon">🖥️</span>
-        <div class="label">Node</div>
-        <div class="value small">{{ node_name }}</div>
-        {% if node_available %}
-          <span class="badge ok">k8s</span>
-        {% else %}
-          <span class="badge warn">N/D</span>
-        {% endif %}
       </div>
 
       <div class="card">
@@ -321,10 +309,12 @@ def hello():
     pod_ip = os.environ.get("POD_IP", "N/D")
     namespace = os.environ.get("POD_NAMESPACE", "N/D")
     node_name = os.environ.get("NODE_NAME", "N/D")
+    c1, c2, c3, c4 = palette_for(hostname)
 
     return render_template_string(
         HTML,
         hostname=hostname,
+        c1=c1, c2=c2, c3=c3, c4=c4,
         container_ip=get_container_ip(),
         pod_ip=pod_ip,
         pod_ip_available=pod_ip != "N/D",
