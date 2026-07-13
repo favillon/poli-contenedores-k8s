@@ -66,21 +66,13 @@ Aplicar cambio sobre la raiz /  cambiar le version del despliegue
 ## killercode
 
 Clonar el repo
-> git clonehttps://github.com/favillon/poli-contenedores-k8s.git
+> git clone https://github.com/favillon/poli-contenedores-k8s.git
 
 
 Crear imagen
 ```
-docker build -t mi-app-python-k8s:v1 .
+docker build -t mi-app-python-k8s:v1 ./src/
 ```
-
-
-Montar la imagen en el cluster
-
-```
-kind load docker-image mi-app-python-k8s:v1
-```
-
 
 Guardar imagen
 
@@ -88,7 +80,18 @@ Guardar imagen
 docker save mi-app-python-k8s:v1 > mi-app.tar
 ```
 
-importar imagen
+Importar imagen
 ```
 ctr -n=k8s.io images import mi-app.tar
 ```
+
+
+Montar la imagen en el cluster
+
+```
+kubectl apply -f k8s-despliegue-killercode.yaml
+```
+
+
+kubectl get nodes
+kubectl get pods
