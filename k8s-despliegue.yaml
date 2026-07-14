@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: python-contenedor
-        image: mi-app-python-k8s:v4
+        image: mi-app-python-k8s:v1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
@@ -26,7 +26,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
+  - port: 8082
     targetPort: 5000
   selector:
     app: python-app

@@ -3,13 +3,16 @@
 > Levantar  K8S en ambiente local MAC
 
 
-Tener docker instalado
+Herramientes necesarias
 
+```
 docker --version
 kubectl version
 kind --version
-cloud-provider-kind version
+cloud-provider-kind version # Binario
+```
 
+Abri el Editor  `zed .` posterior a eso explorar el proyecto. Continuar con la creacion de la imagen
 
 Levantar cluster
 
@@ -23,14 +26,10 @@ Simula el balanceador de carga
 sudo cloud-provider-kind
 ```
 
-Abri el Editor  `zed .` posteriora eso explorar el proyecto. Continuar con la creacion dela imagen
-
-
 Crear imagen
 ```
 docker build -t mi-app-python-k8s:v1 .
 ```
-
 
 Montar la imagen en el cluster
 
@@ -38,17 +37,16 @@ Montar la imagen en el cluster
 kind load docker-image mi-app-python-k8s:v1
 ```
 
-
 Monstar el imange del cluster
 ```
 kubectl apply -f k8s-despliegue.yaml
 ```
 
-
+```
 kubectl get nodes
 kubectl get pods
 kubectl get svc python-app-service
-
+```
 
 
 ## Version 2
@@ -65,7 +63,7 @@ Aplicar cambio sobre la raiz /  cambiar le version del despliegue
 
 
 
-## killercode
+## killercoda
 
 Clonar el repo
 > git clone https://github.com/favillon/poli-contenedores-k8s.git
@@ -77,7 +75,6 @@ docker build -t mi-app-python-k8s:v1 ./src/
 ```
 
 Guardar imagen
-
 ```
 docker save mi-app-python-k8s:v1 > mi-app.tar
 ```
@@ -91,9 +88,19 @@ ctr -n=k8s.io images import mi-app.tar
 Montar la imagen en el cluster
 
 ```
-kubectl apply -f k8s-despliegue-killercode.yaml
+kubectl apply -f k8s-despliegue-killercoda.yaml
 ```
 
+Consultar nodos y pods
 
+```
 kubectl get nodes
 kubectl get pods
+``
+
+Terminar  pods
+
+```
+kubectl delete -f k8s-despliegue.yaml
+kind delete cluster
+```
