@@ -20,8 +20,10 @@ kind create cluster --config kind-config.yaml
 Simula el balanceador de carga
 
 ```shell
-cloud-provider-kind
+sudo cloud-provider-kind
 ```
+
+Abri el Editor  `zed .` posteriora eso explorar el proyecto. Continuar con la creacion dela imagen
 
 
 Crear imagen
