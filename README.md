@@ -96,7 +96,7 @@ Consultar nodos y pods
 ```
 kubectl get nodes
 kubectl get pods
-``
+```
 
 Terminar  pods
 
